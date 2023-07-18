@@ -143,7 +143,7 @@ bool draw_command(struct thread_info_cmd ti)
 void usage()
 {
     cout << "--lnums program usage: " << endl;
-    cout << "\tdraw [NDRAWS] << endl;
+    cout << "\tdraw [NDRAWS]" << endl;
     cout << "\tmatch <B1> [B2] [B3] [B4] [B5] [SB]" << endl;
 }
 
