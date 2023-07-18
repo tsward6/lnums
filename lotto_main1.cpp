@@ -138,6 +138,13 @@ bool draw_command(struct thread_info_cmd ti)
     return true;
 }
 
+void usage()
+{
+    cout << "--lnums program usage: " << endl;
+    // ..
+
+}
+
 
 int main()
 {
@@ -225,6 +232,7 @@ int main()
                         cout << "\"" << tmp_str << "\"" << " is an invalid command." << endl;
                         memset(usr_input, 0, sizeof(usr_input));
                         ui_index = 0;
+                        usage();
                         continue;
                     }
                     //results.clear();
