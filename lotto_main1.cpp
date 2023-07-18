@@ -125,7 +125,9 @@ bool draw_command(struct thread_info_cmd ti)
         }
         ticket t;
         for(int i = 0; i < n_draws; i++) {
-            draw_pt d(first_five_max, spec_max);
+            draw d;
+            //d = draw_pt(first_five_max, spec_max);
+            d = draw(first_five_max, spec_max);
             d.fill();
             t.add_draw(d);
         }
