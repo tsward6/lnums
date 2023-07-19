@@ -245,17 +245,23 @@ int main(int argc, char *argv[])
 {
     bool use_async_input = false;
     if(argc > 1) {
+        if(argc > 2) {
+            cout << "Invalid program arguments." << endl << 
+                "\toptions: \"-a\" asynchronous/threaded (for long match times) " << endl;
+            return 1;
+        }
         for(int i = 1; i < argc; i++) {
             string arg = (string)argv[i];
-            if(arg == "-a") 
+            if(arg == "-a") {
                 use_async_input = 1;
-            else {
+                cout << "(using threaded command structure...)" << endl;
+            } else {
                 cout << "\"" << arg << "\" is an invalid program argument." << endl;
+                cout << "\toptions: \"-a\" asynchronous/threaded (for long match times) " << endl;
                 return 1;
             }
         }
     }
-
     char day[4] = {0};
     char s[64] = {0};
     size_t ret; 
