@@ -168,7 +168,9 @@ void process_input(string usr_input, int *thr_index)
         string tmp_str = *results.begin();
         ti.id = *thr_index;
         ti.tokens = results;
-        if(tmp_str == "draw") {
+        if(tmp_str == "help") 
+            usage();
+        else if(tmp_str == "draw") {
             bool do_draw = true;
             if(results.size() > 2) {
                 usage();
