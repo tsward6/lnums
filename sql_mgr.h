@@ -3,8 +3,7 @@
 * 2023-09-18
 * sql_mgr.h   
 *
-* This version of sql_mgr can add and view elements from tables
-* but does not deal with retrieval of elements, rows or columns. 
+* This version of sql_mgr ...
 * 
 */
 
@@ -12,15 +11,6 @@
 
 #ifndef SQL_H
 #define SQL_H
-
-#define DEF_SQL_PORT (short)3306
-//#define DEF_SQL_IP_ADDR {127,0,0,1 }
-//#define ARRAY_SIZE 5
-//#define DEF_SQL_IP_ADDR (int[4]){127,0,0,1}
-
-
-
-//#include "draw.h"
 
 
 
@@ -31,7 +21,7 @@
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
 #include <mysql_driver.h>
-#endif
+
 
 #include <iostream>
 #include <fstream>
@@ -47,258 +37,196 @@
 #include <arpa/inet.h>
 
 #include <cstring>
+#include <string>
 
 #include <sstream>
 #include <vector>
 #include <array>
 
+#define DEF_SQL_PORT (short)3306
 
 
-class sql_mgr {
+const int DEF_SQL_IP_ADDR[4] = {127, 0, 0, 1 };
 
+
+class sql_mgr 
+{
+    
     protected:
-#ifdef __unix__
-    sql::mysql::MySQL_Driver *driver;
-    sql::Connection *con;
-    sql::ConnectOptionsMap connection_properties;
-    sql::Statement *stmt;
-    sql::ResultSet  *res;
-#endif
 
-    bool connected;
+        struct sql_info {
+            sql::mysql::MySQL_Driver *driver;
+            sql::Connection *con;
+            //sql::ConnectOptionsMap *connection_properties;
+            sql::Statement *stmt;
+            sql::ResultSet  *res;
+        } smgr_si;
 
-std::string db_inuse_name;
+        bool connected;
+        std::string db_inuse_name;
+        int ip_addr[4];
+        short port_num;
+        std::string user_name;
 
-int DEF_SQL_IP_ADDR[4] = {127, 0, 0, 1 };
-
-
-
-//std::string
-int ip_addr[4];
-short port_num;
-
+        static std::string get_type_str(int index);
+        static std::string int_to_str(int x);
+        void get_existing_tables();
 
 
-static std::string get_type_str(int index);
+    public:
 
-static int get_pub_ipv4();
+        static std::string get_today_date_str();
+        void connect(), connect_to_db(std::string db_name);
+        void disconnect();
+        void use_db(std::string db_name); //, create_db(std::string db_name);
 
-void get_ipv4_arr(int ip_as_int, int arr[4]);
-
-
-void get_existing_tables();
-
-
-
-
-public:
-
-    
-
-    struct p_key {
-        std::string col_name; //, tbl_name;
-        void *query_val;
-    };
-
-    struct query_entry {
-        int col_index;
-        //string col_name;
-        void *val;
-        struct query_entry *next;
-    };
-
-    
-
-   
-
-    static std::string get_today_date_str();
-    
-
-    void connect();
-    void use_db(std::string db_name), create_db(std::string db_name);
-    
-
-    class InvalidPlatform : public std::exception {
-        std::string message;
-        public:
-        InvalidPlatform(std::string msg) : message(msg) {}
-        std::string what();
-    };
-
-    class ConnectionFailure : public std::exception {
-        std::string message;
-        public:
-        ConnectionFailure(std::string msg) : message(msg) {}
-        std::string what();
-    };
-
-    class UnknownDB : public std::exception {
-        std::string message;
-        public:
-        UnknownDB(std::string msg) : message(msg) {}
-        std::string what();
-    };
-
-    /*
-    class UnknownTable : public std::exception {
-        std::string message;
-        public:
-        UnknownTable(std::string msg) : message(msg) {}
-        std::string what();
-    };
-    */
-
-    
-    
-
-    
-
-    class SourceFileFailure : public std::exception {
-        std::string message;
-        public:
-        SourceFileFailure(std::string msg) : message(msg) {}
-        std::string what();
-    };
-
-    enum SQL_TABLE_TYPES {
-            STT_INT = 0, STT_CHAR, STT_VARCHAR, STT_DATE //, ...
+        class SqlMgrException : public std::exception {
+            std::string message;
+            public:
+            SqlMgrException(std::string msg) : message(msg) {
+                std::cout << "UNFOLDING VAGINERS: " << msg << " - ";
+            }
+            std::string what();
         };
+
+        enum SQL_TABLE_TYPES {
+            STT_INT = 0, STT_LONG, STT_FLOAT, STT_DOUBLE, STT_CHAR, STT_VARCHAR, STT_DATE //, ...
+        };
+
+        static std::string get_num_str(int type, void *val);
     
 
     class sql_table {
-        
-        
-#ifdef __unix__
-        sql::mysql::MySQL_Driver *driver;
-        sql::Connection *con;
-        sql::ConnectOptionsMap *connection_properties;
-        sql::Statement *stmt;
-        sql::ResultSet  *res;
-#endif
 
+        friend class sql_mgr;
+
+        struct sql_info stbl_si;
+        
+        bool complete;
+        bool user_added;
         std::string name;
-        //struct row_info {
-            struct col_info {
-                std::string name;
-                int type;
-                void *val;
-                bool is_nullable;
-                bool in_pkey;
-            };
-            //std::vector<col_info> cols;
-            std::vector<col_info> cols;
-            void **col_ptr_arr; //[];
 
-            
-        //};
-        //std::vector<row_info> rows;
-        void set_col_ptrs();
+        struct col_info {
+            std::string name;
+            int type;
+            bool is_nullable, in_pkey;
 
-        public:
-
-        //auto convert(std::string col_name);
-        inline auto convert(int col_index);
-
-        struct col {
-        std::string name; //, tbl_name;
-        int index;
-        void *val;
-        struct col *next;
-    };
-
-    struct row {
-        struct col *col_head;
-        int index;
-        struct row *next;
-    };
-
-         struct row *get_row(int index);
-        struct col *get_col(int index);
+            struct cval {
+                bool is_null;
+                union tvals {
+                    int int_val;
+                    long long_val;
+                    float float_val;
+                    double double_val;
+                    char str[1000];
+                    //std::string str;
+                    char char_val;
+                } un_val;  
+            } val;
         
+        };
+
+        std::vector<col_info*> cols;
+        int tbr_index;
+        std::string **tbl_buffer;
+        int n_cur_tb_rows;   
 
         std::string get_update_str();
 
-        int get_table_type_index(std::string tt);
+    public:
 
-#ifdef __unix__
-        void set_sql_ptrs(sql::mysql::MySQL_Driver *d, sql::Connection *con,
-                          sql::ConnectOptionsMap *cp, sql::Statement *stmt,
-                          sql::ResultSet  *res);
-#endif
         
+
+        void set_sql_ptrs(struct sql_info *si);
+    
+        bool is_user_created() { return this->user_added; }
+        void set_user_added(bool user_added) { this->user_added = user_added; }
+
+        void executeQuery(std::string qstr);
+
+        int get_int_val(int col_index);
+        std::string get_str_val(int col_index);
+        char get_char_val(int col_index);
+        long get_long_val(int col_index);
+        float get_float_val(int col_index);
+        double get_double_val(int col_index);
+
+        class SqlTableException : public std::exception {
+            std::string message;
+            public:
+            SqlTableException(std::string msg) : message(msg) {
+                std::cout << "FOLDING BONERS: " << msg << " - ";
+                //this->message = msg; ??
+            }
+            std::string what();
+        };
+
+        
+        int get_table_type_index(std::string tt);
         int n_cols() const;
-        //int n_rows();
+        int n_rows();
+        int n_rows() const;
+
+        void display_table();
+        void clear_table();
         
         sql_table(std::string name);
-
-        //int size() { return this->cols.size(); } // TODO: why don't these work?
-
-        //int empty() { return this->cols.empty(); }
+        ~sql_table();
 
         void add_column(std::string name, int type, bool is_nullable, bool in_pkey);
 
-        
-
         void load(std::string col_name, void *val);
-        void push(); 
-
+        void push(), push(bool clear); 
         void unload(int row, std::string col_name);
-        void * * pull();
-
-        std::string get_name() { return this->name; }
-    
-        friend std::ostream& operator<< (std::ostream& out, const sql_table& data);
-
-        std::string get_col_name(int index);
-        int get_col_type(int index);
-        bool get_col_isnullable(int index);
-        bool get_col_in_pkey(int index);
-        int get_col_index(std::string col_name);
-
-        //void push_row();
+        void clear();
+        bool pull();
         
+        bool col_is_null(int col_index);
+        bool col_exists(std::string col_name);
+        bool empty();
+        int get_col_index(std::string col_name);      
 
-        //void * pull_row();
+        bool is_complete() { return this->complete; }
+        std::string get_name() { return this->name; }               /* Can return any field address (is a union) */
+        const void * get_val_ptr(int col_index) { return &this->cols.at(col_index)->val.un_val.str; }
+        std::string get_col_name(int index) { return this->cols.at(index)->name; }
+        int get_col_type(int index) { return this->cols.at(index)->type; }
+        bool get_col_isnullable(int index) { return this->cols.at(index)->is_nullable; }
+        bool get_col_in_pkey(int index) { return this->cols.at(index)->in_pkey; }
 
-
+        friend std::ostream& operator<< (std::ostream& out, const sql_table& data);
     };
 
-    //static inline int n_rows(sql_table *t);
-
-    struct query_entry * retrieve_entry(std::string tbl_name, std::vector <p_key> *query);
-
-    struct col *get_col_head(std::string tbl_name, std::vector <p_key> *query);
-    
-    //void update_table(sql_table *t);
-
-    sql_table * create_table(std::string tbl_name);
+    sql_table * operator()(int i) const { return this->tables.at(i); }
 
     void add_table(sql_table *t);
-
     int n_tables() { return (int)this->tables.size(); }
-
     std::string get_db_inuse_name() const { return this->db_inuse_name; } 
     
     sql_mgr();
+    sql_mgr(std::string user_name);
+    sql_mgr(std::string user_name, std::string db_name);
     ~sql_mgr();
 
-    void display_table_query(sql_table *t);
-
-    void source(std::string file_name);
-
-    bool is_connected() { return this->connected; }
     
+    bool is_connected() { return this->connected; }
     bool contains_table(std::string tbl_name);
     sql_table *get_table(std::string tbl_name);
-    friend std::ostream& operator<< (std::ostream& out, const sql_mgr& data);
 
-    void clear_table(sql_table *t);
+    int *get_ip_addr() const { return &((sql_mgr*)this)->ip_addr[0]; };
+    short get_port_num() const { return this->port_num; }
 
+    
+    void drop_table(sql_table *t);
     std::vector<std::string> get_table_names();
 
-    private:
-    std::vector<sql_table> tables;
+    void set_port_num(short port_num) { this->port_num = port_num; }
+    void set_ip_addr(int a1, int a2, int a3, int a4), set_ip_addr(int arr[4]);
 
+    private:
+    std::vector<sql_table*> tables;
+
+    friend std::ostream& operator<< (std::ostream& out, const sql_mgr& data);
 };
 
 std::ostream& operator<<(std::ostream& output, const sql_mgr::sql_table& data);
@@ -309,5 +237,5 @@ std::ostream& operator<<(std::ostream& output, const sql_mgr& data);
 
 
 
-
+#endif
 #endif
