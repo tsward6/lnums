@@ -8,6 +8,7 @@
 
 
 /* sql_mgr Default constructor. */
+#ifdef __unix__
 sql_mgr::sql_mgr() 
 {
 #ifndef __unix__
@@ -40,16 +41,16 @@ sql_mgr::sql_mgr(std::string user_name, std::string db_name) : sql_mgr()
     this->connect_to_db(db_name);
 }
 
-#ifdef __unix__
-
 /* sql_mgr destructor. */
 sql_mgr::~sql_mgr()
 {
 
     for(int i = 0; i < this->n_tables(); i++) {
         /* Only delete the tables that existed originally (user added is done by user) */
-        if(!this->tables.at(i)->is_user_created()) 
+        if(!this->tables.at(i)->is_user_created()) {
+            std::cout << "CRYING JUNKIES[" << i << "]" << std::endl;
             delete this->tables.at(i);
+        }
     }
 
     if(this->connected) {
@@ -190,6 +191,7 @@ void sql_mgr::disconnect()
 {
     if(!this->connected) 
         throw SqlMgrException("Cannot disconnect. (is not connected)");  
+    std::cout << "~DISCONNECTING BONERS~" << std::endl;
     this->smgr_si.con->close();
     delete this->smgr_si.con; 
     delete this->smgr_si.stmt; 
@@ -673,11 +675,8 @@ void sql_mgr::add_table(sql_table *t)
     else if(!this->connected) 
         throw SqlMgrException("Not connected, Cannot add table \"" + t->get_name() + "\"");
 
-    //if(!t->is_complete()) 
-      //  this->set_complete(*t); 
+
     t->complete = true;
-    std::cout << "UNFRIENDING JUNKIES: " << 
-            t->is_complete() << std::endl;
 
     add_str = "create table " + t->get_name() + "(";
 
@@ -816,9 +815,6 @@ void sql_mgr::sql_table::load(std::string col_name, void *val)
 
 
 
-
-
-
 void sql_mgr::sql_table::unload(int row, std::string col_name)
 {
     int n_rows = 0;
@@ -843,8 +839,6 @@ void sql_mgr::sql_table::unload(int row, std::string col_name)
     
     while(this->stbl_si.res->next()) {
 
-        std::cout << "BURSTING VAGINERS: " << n_rows << std::endl;
-        
         if(n_rows++ == row) {
 
             for(int c = 0; c < this->n_cols(); c++) {
@@ -852,17 +846,13 @@ void sql_mgr::sql_table::unload(int row, std::string col_name)
                 if(col_name == this->cols.at(c)->name) {
                         
                     std::cout << "UNLOADING GRANNIES[" << c << "]~ \"" << this->cols.at(c)->name << "\"" << std::endl;
-                        //exit(9);
-                        //tbl_contains_col = true;
+ 
                     int tmp_i, col_type = this->get_col_type(c);
                     long tmp_l;
                     char tmp_c;
                     float tmp_f;
                     double tmp_d;
                     std::string tmp_str = this->stbl_si.res->getString(c+1);
-                    std::cout << "GRIPING TRANNIES(" << col_type << ")~ " << std::endl;
-                    std::cout << "UNLOADING JUNKIES[" << c << "]~ \"" << tmp_str << "\"" << std::endl;
-                        //exit(9);
                         
                     switch (col_type) {
                         case STT_INT:
@@ -894,13 +884,12 @@ void sql_mgr::sql_table::unload(int row, std::string col_name)
                             throw SqlTableException("\"" + tmp_str + "\" is an unknown type.");
                             
                     }
-                    //delete this->stbl_si.res;
                     break;
                 }
             }
         }
     }
-    std::cout << "REARRANGING VA-JAY-JAYS~ " << n_rows << std::endl;
+
     delete this->stbl_si.res;
 }
        
@@ -928,10 +917,8 @@ int sql_mgr::sql_table::get_table_type_index(std::string tt)
 void sql_mgr::sql_table::display_table()
 {
     
-    //std::cout << *t << std::endl;
     std::string qstr = "select * from " + this->name;
-    std::cout << "BENDING BONERS IN BOSNIA~ \"" << qstr << "\"~ " << std::endl;
-    //exit(9);
+    std::cout << "~=~SALAD TOSSING GRANNIES~=~\"" << qstr << "\"~ " << std::endl;
 
     if(!this->complete) 
         throw SqlTableException("Cannot display contents of incomplete table " + this->name);
@@ -940,40 +927,18 @@ void sql_mgr::sql_table::display_table()
         return;
     }
 
-    this->stbl_si.res = this->stbl_si.stmt->executeQuery(qstr);
-    auto frumphouse = this->stbl_si.res->getMetaData();
-    int ncols = frumphouse->getColumnCount();
-    std::string col_names[ncols];
-    int n_rows = 0;
-    
-    while(this->stbl_si.res->next()) {
-        if(n_rows++ == 0) {
-            for(int i = 1; i < ncols+1; i++) {
-                col_names[i-1] = frumphouse->getColumnName(i);
-            }
-        } 
+    try {
+        this->stbl_si.res = this->stbl_si.stmt->executeQuery(qstr);
+    } catch(sql::SQLException const& sqe) {
+        throw sqe; 
     }
 
-    std::cout << "rows=" << n_rows << std::endl;
-    //for(int i = 0; i < ncols; i++) {
-      //  std::cout << "SHOWING BONERS: \"" << col_names[i] << "\"" << std::endl;
-    //}
-
-    delete this->stbl_si.res;
-    //res = 0;
-
-    this->stbl_si.res = this->stbl_si.stmt->executeQuery(qstr);
-    //std::cout << "BENDING BONERS IN BOSNIA 2" << std::endl;
-    frumphouse = this->stbl_si.res->getMetaData();
-    //std::cout << "BENDING BONERS IN BOSNIA 3" << std::endl;
-    ncols = frumphouse->getColumnCount();
-    //std::cout << "OVERDOSING NANNIES~ " << ncols << std::endl;
-    //exit(9);
+    auto frumphouse = this->stbl_si.res->getMetaData();
 
     int r = 0;
     while(this->stbl_si.res->next()) {
         std::cout << "-ROW[" << r << "] " << std::endl;
-        for(int c = 0; c < ncols; c++) {
+        for(int c = 0; c < this->n_cols(); c++) {
             std::string col_name = frumphouse->getColumnName(c+1);
             std::string col_type_str = frumphouse->getColumnTypeName(c+1);
             std::cout << "--" << col_name << "[" << c << "](" << col_type_str << ")=";
@@ -982,17 +947,12 @@ void sql_mgr::sql_table::display_table()
             else
                 std::cout << this->stbl_si.res->getString(c+1);
             std::cout << std::endl;
-            
-            
         }
         r++;
     }
 
     delete this->stbl_si.res;
     //res = 0;
-
-    std::cout << "TOSSING VAGINERS: " << n_rows << ", " << ncols << std::endl;
-    //exit(9);
 
     std::cout << "~@-~@-~@- TABLING BONERS -@~-@~-@~ " << std::endl;
     
@@ -1014,11 +974,7 @@ void sql_mgr::sql_table::display_table()
 
     std::cout << "~@-~@-~@-~@~-@-~@-~@-~@-~@~-@~-@~-" << std::endl;
 
-    std::cout << "SALAD TOSSING GRANNIES: " << n_rows << ", " << ncols << std::endl;
-    //exit(9);
-    
-
-//#endif  
+    std::cout << "~=~SALAD TOSSING JABRONIES NAMED DANNY~=~" << std::endl;
 
 }
 
@@ -1027,11 +983,13 @@ void sql_mgr::drop_table(sql_table *t)
 {
     std::string drop_str = "drop table " + t->get_name() + ";"; 
     std::cout << "DROPPING GRANNIES: \"" << drop_str << "\"" << std::endl;
-    //exit(9);
-    //#ifdef __unix__
-    this->smgr_si.stmt->execute(drop_str);
+    
+    try {
+        this->smgr_si.stmt->execute(drop_str);
+    } catch(sql::SQLException const& sqe) {
+        throw sqe; 
+    }
 
-    //#endif
     for(int i = 0; i < (int)this->tables.size(); i++) {
         if(this->tables.at(i)->get_name() == t->get_name()) {
             this->tables.erase(this->tables.begin() + i);
@@ -1043,18 +1001,13 @@ void sql_mgr::drop_table(sql_table *t)
 
 void sql_mgr::sql_table::clear_table()
 {
-    //delete from Daily_TMP;
     std::string clear_str = "delete from " + this->name + ";"; 
     std::cout << "GURGLING GRANNIES: \"" << clear_str << "\"" << std::endl;
-    //#ifdef __unix__
-    this->stbl_si.stmt->execute(clear_str);
-    //std::cout << "BENDING BONERS IN BOSTON 2" << std::endl;
-    //auto frumphouse = res->getMetaData();
-    //std::cout << "BENDING BONERS IN BOSTON 3" << std::endl;
-    //int ncols = frumphouse->getColumnCount();
-    //std::cout << "OVERDOSING NANNIES~ " << ncols << std::endl;
-
-    //#endif
+    try {
+        this->stbl_si.stmt->execute(clear_str);
+    } catch(sql::SQLException const& sqe) {
+        throw sqe; 
+    }
 
 }
 
@@ -1073,184 +1026,84 @@ std::vector<std::string> sql_mgr::get_table_names()
 void sql_mgr::get_existing_tables()
 {
 
-//#ifdef __unix__
-    //while(1)
-    //std::cout << "CRYING BONERS" << std::endl;
     std::string bending_boner = "show tables;";
     std::vector<std::string> table_names;
     
-    //while(1)
-    //std::cout << "BENDING BONERS IN BOSTON: \"" << bending_boner << "\"" << std::endl;
-    //exit(9);
-    // try
-    //sql::ResultSet  *res;
-    this->smgr_si.res = this->smgr_si.stmt->executeQuery(bending_boner);
-    //std::cout << "BENDING BONERS IN BOSTON 2" << std::endl;
-    //auto frumphouse = res->getMetaData();
-    //std::cout << "BENDING BONERS IN BOSTON 3" << std::endl;
-    //int ncols = frumphouse->getColumnCount();
-    //std::cout << "OVERDOSING NANNIES~ " << ncols << std::endl;
-    //if(ncols < 9)
-    //if(ncols != 9)
-      //  return false;
-    //std::cout << "COUNTING VAGINERS: " << ncols << std::endl;
-    //exit(9);
+    std::cout << "BENDING BONERS JUST OUTSIDE OF BOSTON: \"" << bending_boner << "\"" << std::endl;
 
-     //int tindex = 0;
-    while (this->smgr_si.res->next()) {
+    try {
+        this->smgr_si.res = this->smgr_si.stmt->executeQuery(bending_boner);
+    } catch(sql::SQLException const& sqe) {
+        throw sqe; 
+    }
 
-       // std::cout << "GURGLING JUNKIES: " << this->stmt << std::endl;
-        //exit(9);
-
-       // int row = res->getRow();
-        //std::cout << "HOLDING BONERS IN ARKANSAS[" << row << "] \"" << std::endl;
-        //sql_table * junkie_table = new sql_table(res->getString(i));
-        //std::cout << "UNTABLING JUNKIES: " << *junkie_table << std::endl;
-        
+    while (this->smgr_si.res->next()) { // NOTE: can't call get_table_names (haven't made them yet)
         table_names.push_back(this->smgr_si.res->getString(1));
         std::cout << "SRUNCHING BONERS: \"" << 
             this->smgr_si.res->getString(1) << std::endl;
-        
     }
 
     delete this->smgr_si.res;
-    //res = 0;
 
     std::vector<std::vector<std::string>> pkeys;
 
     for(int i = 0; i < (int)table_names.size(); i++) {
         std::vector<std::string> cum_dumpster;
-        //
         std::string table_name = table_names.at(i);
-        //std::cout << "TABLING BONERS OF COURSE: \"" << table_name << "\"" << std::endl;
         std::string bonerhouse = "SHOW KEYS FROM " + table_name + " WHERE Key_name = 'PRIMARY';";
-
-        //std::cout << "BENDING BONERS IN BANCOCK: \"" << bonerhouse << "\"" << std::endl;
         
-        //bonerhouse = "show columns from " + table_name + " where `Key` = \"PRI\"";
-        //std::cout << "BENDING BONERS OUTSIDE OF BANGCOCK: \"" << bonerhouse << "\"" << std::endl;
-
-        this->smgr_si.res = this->smgr_si.stmt->executeQuery(bonerhouse);
-
-        while (this->smgr_si.res->next()) {
-            
-            
-            auto frumphouse = this->smgr_si.res->getMetaData();
-            int ncols = frumphouse->getColumnCount();
-            //sql_table boner_table(table_names.at(i)); // = new 
-            for(int i = 1; i < ncols+1; i++) {
-                std::string wow = frumphouse->getColumnName(i);
-                if(wow == "Column_name") {
-                    std::string uhohs = this->smgr_si.res->getString(i);
-                    //std::cout << "TABLING VAGINERS OF COURSE[" << i << "] \" " << wow << std::endl;
-                    cum_dumpster.push_back(uhohs);
-                    //std::cout << "BREAKING BONERS IN BANCOCK: \"" << uhohs << "\"" << std::endl;
-                }
-            }
+        try {
+            this->smgr_si.res = this->smgr_si.stmt->executeQuery(bonerhouse);
+        } catch(sql::SQLException const& sqe) {
+            throw sqe; 
         }
 
+        auto frumphouse = this->smgr_si.res->getMetaData();
+        int ncols = frumphouse->getColumnCount();
+
+        while (this->smgr_si.res->next()) {
+            for(int i = 1; i < ncols+1; i++) {
+                std::string wow = frumphouse->getColumnName(i);
+                if(frumphouse->getColumnName(i) == "Column_name") 
+                    cum_dumpster.push_back(this->smgr_si.res->getString(i));
+            }
+        }
         pkeys.push_back(cum_dumpster);
-
         delete this->smgr_si.res;
-        //res = 0;
-        
     }
-
-    //std::cout << "TABLING BONERS~~" << std::endl;
-    //exit(9);
 
     for(int i = 0; i < (int)table_names.size(); i++) {
 
         std::vector<std::string> tbl_pkeys = pkeys.at(i);
-
-        //std::cout << "TABLING BONERS IN ARKANSAS[" << i << "] \" " << table_names.at(i) << std::endl;
-        
-    
         std::string bonerhouse = "select * from " + table_names.at(i) + ";";
-        //std::cout << "BENDING BONERS JUST OUTSIDE OF BOSTON: \"" << bonerhouse << "\"" << std::endl;
+
+        sql_table *boner_table = new sql_table(table_names.at(i));
+        boner_table->set_sql_ptrs(&this->smgr_si);
         
-        this->smgr_si.res = this->smgr_si.stmt->executeQuery(bonerhouse);
+        try {
+            this->smgr_si.res = this->smgr_si.stmt->executeQuery(bonerhouse);
+        } catch(sql::SQLException const& sqe) {
+            throw sqe; 
+        }
+
         auto frumphouse = this->smgr_si.res->getMetaData();
         int ncols = frumphouse->getColumnCount();
-        //std::cout << "QUACKING VAGINERS: " << ncols << ", " << sizeof(sql_mgr::sql_table) << std::endl;
-        //exit(9);
-        sql_table *boner_table = new sql_table(table_names.at(i));
-        //sql_mgr::sql_table *boner_table = new sql_mgr::sql_table(table_names.at(i));
-
-        
-        //res = this->stmt->executeQuery(bonerhouse);
-        //auto frumphouse = res->getMetaData();
-        //int ncols = frumphouse->getColumnCount();
-        //sql_table boner_table(table_names.at(i)); // = new 
-        
-        //sql::mysql::MySQL_Driver *driver;
-        //sql::Connection *con;
-        //sql::ConnectOptionsMap *connection_properties;
-        //sql::Statement *stmt;
-        //sql::ResultSet  *res;
-        
-        
-        //boner_table.driver = this->driver;
-        //boner_table.con = this->con;
-        //boner_table.connection_properties = &this->connection_properties;
-        //boner_table.stmt = this->stmt;
-        //boner_table.res = res;
-
-    
-        //boner_table->set_sql_ptrs(this->driver, this->con, &this->connection_properties, this->stmt, this->res);
-        boner_table->set_sql_ptrs(&this->smgr_si);
-
         for(int j = 1; j < ncols+1; j++) {
-
-             std::cout << "TOSSING BONERS I WAS <~#~{@;@} [" << j << "]" << std::endl;
-            
-            std::string wow = frumphouse->getColumnName(j);
-            //std::cout << "OVERDOSING NANNIES~[" << j << "] \" " << wow << std::endl;
-            wow = frumphouse->getColumnTypeName(j);
-            //std::cout << "OVERDOSING GRANNIES~[" << j << "] \"" << wow << std::endl;
             int table_type_index = boner_table->get_table_type_index(frumphouse->getColumnTypeName(j));
-            //std::string name, int type, bool not_null, bool in_pkey
-            //std::cout << "UNDERGROWING VAGINERS"  << std::endl;
-            //bool nullable = frumphouse->isNullable(j);
             bool in_pkey = false;
-
             for(int k = 0; !in_pkey && k < (int)tbl_pkeys.size(); k++) {
-                //std::cout << "EXPOSING GRANNIES~[" << k << "] \"" << wow << "\"" << std::endl;
-                //std::cout << "EXPOSING NANNIES~[" << k << "] \"" << tbl_pkeys.at(k) << "\"" << std::endl;
-                //std::cout << "POUTING JUNKIES: " << frumphouse->getColumnName(j) << std::endl;
-                if(frumphouse->getColumnName(j) == tbl_pkeys.at(k)) {
-                    //std::cout << "GRANDPA'S GETTIN' MOOSE VA-JAY-JAYS[" << j << "]: \"" << frumphouse->getColumnName(j) << "\"~~ ";
-                    //exit(9);
+                if(frumphouse->getColumnName(j) == tbl_pkeys.at(k)) 
                     in_pkey = true;
-                }
             }
-            //std::cout << "PEEKING VAGINERS" << std::endl;
-            //if(table_names.at(i) == "lnums") {
-                //std::cout << "PEEKING JUNKIES: " << nullable <<  ", " << in_pkey << std::endl;
-                //exit(9);
-            //}
             boner_table->add_column(frumphouse->getColumnName(j), table_type_index, 
                                    frumphouse->isNullable(j), in_pkey);
         }
-        
-        //boner_table->set_complete();
-        //this->set_complete(*boner_table);
+
         boner_table->set_user_added(false);
         boner_table->complete = true;
-        if(i == 0)
-            std::cout << "UNFRIENDING VAGINERS: " << 
-                boner_table->is_complete() << std::endl;
-        //exit(9);
-
         this->tables.push_back(boner_table);
-        //boner_table.set_col_ptrs();
-
         delete this->smgr_si.res;
-        //res = 0;
-        
     }
-
-//#endif
 
 }
 
@@ -1276,35 +1129,20 @@ std::string sql_mgr::get_today_date_str()
     int month = aTime->tm_mon + 1; // Month is 0 - 11, add 1 to get a jan-dec 1-12 concept
     int year = aTime->tm_year + 1900; // Year is # years since 1900
 
-    //std::string frumpster, big_frumpster;
-    //std::stringstream strstream;
-    //strstream << year;
-    //strstream >> frumpster;
     std::string ret = get_num_str(STT_INT, &year) + "-";
 
-    //std::stringstream strstream1;
-    //strstream1 << month;
-    //strstream1 >> frumpster;
-    //big_frumpster += get_num_str(STT_INT, &month); // + "-";
     if(month < 10)
         ret += "0";
     ret += get_num_str(STT_INT, &month) + "-";
-   // big_frumpster += frumpster + "-";
 
-    //std::stringstream strstream2;
-    //strstream2 << frump_day;
     if(frump_day < 10)
         ret += "0";
-    //strstream2 >> frumpster;
-    //big_frumpster += frumpster;
+
     ret += get_num_str(STT_INT, &frump_day); // + "-";
 
     return ret;
 }
 
-//#ifdef __unix__
-//void sql_mgr::sql_table::set_sql_ptrs(sql::mysql::MySQL_Driver *d, sql::Connection *con,
-  //                        sql::ConnectOptionsMap *cp, sql::Statement *stmt, sql::ResultSet *res)
 void sql_mgr::sql_table::set_sql_ptrs(struct sql_info *si)
 {
     this->stbl_si.driver = si->driver;
@@ -1313,14 +1151,11 @@ void sql_mgr::sql_table::set_sql_ptrs(struct sql_info *si)
     this->stbl_si.stmt = si->stmt;
     this->stbl_si.res = si->res;
 }
-//#endif
+
 
 
 int sql_mgr::sql_table::n_rows() 
 {
-//#ifndef __unix__
-  //  return 0;
-//#else
     int ret; 
     try {
         this->stbl_si.res = this->stbl_si.stmt->executeQuery("select * from " + this->name + ";");
@@ -1331,7 +1166,6 @@ int sql_mgr::sql_table::n_rows()
     }
     delete this->stbl_si.res; 
     return ret;
-//#endif
 }
 
 int sql_mgr::sql_table::n_rows() const
@@ -1347,37 +1181,21 @@ int sql_mgr::sql_table::n_cols() const
 
 bool sql_mgr::sql_table::empty() 
 { 
-//#ifdef __unix__
     if(!this->stbl_si.stmt)
         return true;
     return this->n_rows() == 0; 
-//#else
-    //return true;
-//#endif
-    
 }
 
 std::ostream& operator<< (std::ostream& out, const sql_mgr::sql_table& data)
 {   
-    //std::cout << "JIGGLING BONERS" << std::endl;
-    int n_cols = data.n_cols();
-    //std::cout << "GIGGLING BONERS" << std::endl;
-    //int n_rows = ((sql_mgr::sql_table&)data).n_rows();
-    //std::cout << "WIGGLING BONERS" << std::endl;
 
-    out << "SQL_TABLE: \"" << data.name << "\" contains "; // << std::endl;
-    //if(n_rows == 0)
-      //  out << " contains no rows. (empty)";
-    //else 
-        //out << " contains " << n_rows << " row"; // and ";
-    //if(n_rows > 1)
-      //  out << "s";
-    //out << " and ";
+    int n_cols = data.n_cols();
+    out << "SQL_TABLE: \"" << data.name << "\" contains ";
     
     if(data.cols.empty())
         out << "no columns. (empty)";
     else {
-        out << n_cols  << " column"; // << std::endl;
+        out << n_cols  << " column"; 
         if(n_cols > 1)
             out << "s";
         out << " and ";
@@ -1448,26 +1266,20 @@ std::ostream& operator<< (std::ostream& out, const sql_mgr& data)
         out << "NOT ";
     out << "connected, ";
       
-    
     if(data.get_db_inuse_name() == "")
         out << "no database in use";
     else
         out << "using database " << data.get_db_inuse_name();
-    out << ", contains " << data.tables.size() << " table"; // << std::endl;
+    out << ", contains " << data.tables.size() << " table"; 
     if(data.tables.size() != 1)
         out << "s";
-    //out << ".";
-    
 
     if(!data.tables.empty()) {
         
         for(int i = 0; i < (int)data.tables.size(); i++) {
-            //std::cout << "UNFOLDING GRANNIES" << std::endl;
             out << std::endl << "-";
-            //const sql_mgr::sql_table granny_table = data.tables.at(i);
             auto granny_table = data.tables.at(i);
-            out << *granny_table; // << std::endl << "-";
-
+            out << *granny_table; 
         }
     }
 
