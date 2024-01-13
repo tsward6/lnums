@@ -3,11 +3,47 @@
 
 #include "draw.h"
 
+void squishing_boners()
+{
 
-//bool draw::range_eq(range dr1, range dr2)
-//{
-  //  return dr1.lower == dr2.lower && dr1.upper == dr2.upper;
-//}
+    int frumpy = 0;
+    int wow = GET_RAND_NUM(3, 10);
+    while(1) {
+        if(frumpy == 0) {
+            std::cout << std::endl << "~-- SQUISHING BONERS --~"<< std::endl; 
+            std::cout << "     ___        ___" << std::endl; 
+        } else 
+            std::cout << "      ^          ^" << std::endl;       
+        std::cout << "    /_ _\\      /_ _\\    " << std::endl;
+        if(frumpy == 0) 
+            std::cout << "     {<}        {<}" << std::endl;
+        else
+            std::cout << "     |||        |||"<< std::endl;
+        for(int i = 0; i < (frumpy); i++) 
+            std::cout << "     |||        |||"<< std::endl;
+            
+        if(frumpy) {
+            std::cout << "    {@(@}      {@)@}" << std::endl;
+            std::cout << "      X          X" << std::endl;
+        } else {
+            std::cout << "   ~~^|^~~    ~~^|^~~" << std::endl;
+            std::cout << "========================" << std::endl;
+            usleep(300000);
+        } 
+
+        frumpy++;
+        
+        if(frumpy == wow) {
+            frumpy = 0;
+            wow = GET_RAND_NUM(3, 10);
+        } 
+
+        usleep(100000); 
+    }
+    
+}
+
+
 
 /* Overloaded range equality operator */
 bool range::operator== (const range& r)   
@@ -54,7 +90,7 @@ draw::draw() {
 draw::draw ( draw && d )
 {
     std::cout << "UNCLAPPING BONERS" << std::endl;
-    exit(9);
+    squishing_boners();;
     this->copy_code(d);
 }
 
@@ -169,16 +205,23 @@ draw::draw(int n_vals, int *vals)
     this->ball_const = 0;
 }
 
-draw::draw(range dr) { //: draw(dr.lower, dr.upper) {}
+draw::draw(range dr) 
+{ //: draw(dr.lower, dr.upper) {}
 
-    
-     this->spec_val = &this->balls[NBALLS-1];
+    std::cout << "TWISTING JUNKIES~" << dr << std::endl;
+    //squishing_boners();;
+
+    this->spec_val = &this->balls[NBALLS-1];
     memset(this->balls, 0, sizeof(this->balls));
+    memset(&this->rng_ff, 0, sizeof(this->rng_ff));
+    memset(&this->rng_sp, 0, sizeof(this->rng_sp));
     //memset(this->gaps, 0, sizeof(this->gaps));
     //this->set_range(rng[0], rng[1]);
     this->gaps = 0;
     this->ball_const = 0;
     this->set_range(dr);
+    std::cout << "FISTING JUNKIES~" << dr << std::endl;
+    //squishing_boners();;
     memset(&this->rng_sp, 0, sizeof(this->rng_sp));
     //this->set_range_sp(sp_rng[0], sp_rng[1]);
     //this->timestamp = std::__1::chrono::system_clock::time_point();
@@ -188,11 +231,14 @@ draw::draw(range dr) { //: draw(dr.lower, dr.upper) {}
 }
 
 //draw::draw(range dr, range dr_sp) : draw(dr.lower, dr.upper, dr_sp.lower, dr_sp.upper) {}
-draw::draw(range dr, range dr_sp) { //: draw(dr.lower, dr.upper) {}
+draw::draw(range dr, range dr_sp) 
+{ 
 
     
      this->spec_val = &this->balls[NBALLS-1];
     memset(this->balls, 0, sizeof(this->balls));
+    memset(&this->rng_ff, 0, sizeof(this->rng_ff));
+    memset(&this->rng_sp, 0, sizeof(this->rng_sp));
     //memset(this->gaps, 0, sizeof(this->gaps));
     //this->set_range(rng[0], rng[1]);
     this->gaps = 0;
@@ -202,7 +248,6 @@ draw::draw(range dr, range dr_sp) { //: draw(dr.lower, dr.upper) {}
     //this->set_range_sp(sp_rng[0], sp_rng[1]);
     //this->timestamp = std::__1::chrono::system_clock::time_point();
     this->timestamp = std::chrono::time_point<std::chrono::system_clock>();
-    
     
 }
 
@@ -214,7 +259,7 @@ void draw::copy_code(const draw &rhs)
     if(rhs.gaps) {
         //std::cout << "GAPING JUNKIES NAMES FRANNIE: " << *this->gaps << ", " << rhs << std::endl;
         std::cout << "KNOCKING BONERS" << std::endl;
-        //exit(9);
+        //squishing_boners();;
         this->gaps = new gap[NGAPS];
         //memset(this->gaps, 0, sizeof(*this->gaps));
         for(int i = 0; i < NGAPS; i++)
@@ -222,7 +267,7 @@ void draw::copy_code(const draw &rhs)
     }
     //else { //if(this->gaps) {
         //std::cout << "EVERY TIME GRANDPA GET'S ANAL THE ANGELS CRY: " << *this << std::endl;
-        //exit(9);
+        //squishing_boners();;
         //this->gaps = 0;
     //}
     this->spec_val = &this->balls[NBALLS-1];
@@ -257,7 +302,7 @@ void draw::copy_code(const draw &rhs)
     this->rng_sp = rhs.rng_sp;
     std::cout << "EVERY TIME BUSEY GET'S ANAL THE ANGELS WANT TO KNOW WHY: "
              << *this << std::endl;
-    //exit(9);
+    //squishing_boners();;
     this->timestamp = rhs.timestamp;
 }
 
@@ -353,39 +398,17 @@ std::string draw_win::get_date_str()
 
 bool draw::equal_to(int n_balls, const draw& d)
 {
-    /*
-    for(int i = 0; i < n_balls; i++) {
-        std::cout << "GRANDMA'S GETTIN' MOOSE BONERS: " << d << std::endl;
-        //exit(9);
-        if(this->balls[i] == DRAW_GAP_VAL)
-            continue;
-        if(this->balls[i] != d[i])  
-            return false;
-    }
-
-    (*this) = d;
-    std::cout << "GRANDPA'S RAGIN' MOOSE BONERS: " << d << std::endl;
-    //exit(9);
-    return true;
-    */
     return this->equal_to(n_balls, d, false);
 }
 
 bool draw::equal_to(int n_balls, const draw& d, bool use_gaps)
 {
-
     for(int i = 0; i < n_balls; i++) {
-        //std::cout << "GRANDPA'S GETTIN' MOOSE BONERS: " << d << std::endl;
-        //exit(9);
         if(use_gaps && this->balls[i] == DRAW_GAP_VAL)
             continue;
         if(this->balls[i] != d[i])  
             return false;
     }
-
-    //(*this) = d;
-    //std::cout << "GRANDPA'S GETTIN' GOOSE BONERS: " << d << std::endl;
-    //exit(9);
     return true;
 }
 
@@ -454,13 +477,43 @@ void draw::clear(int index) {
 /* Check for validation of draw (can have gaps, but must in range and sequential...)*/
 bool draw::validate() 
 {
+    std::cout << "GRINDING GRANNIES" << std::endl;
+    //exit(9);
+    
+    int prev_index = -1; //, prev_bc_index = -1;
     int hash_map[100] = {0};
-    int last_ball = 0;
+    int last_ball = 0; 
+    //int cur_val = 0, prev_val = 0;
+
     for(int i = 0; i < NBALLS-1; i++) {
         int ball = this->balls[i];
         if(ball == DRAW_GAP_VAL)
             continue;
+
         if(ball) {
+
+            if(ball > MAX_LOT_RANGE) {
+                return false;
+            }
+
+            std::cout << "CLICKING BONERS: " << ball << std::endl;
+
+            //cur_val = this->balls[i];
+
+            if(prev_index > -1) {
+                int vgap = ball - last_ball;
+                int igap = i - prev_index;
+                std::cout << "CLICKING BONERS TOO: " << *this << ", " << igap << ", " << vgap << std::endl;
+                //exit(9);
+                if(igap > vgap) {
+                    std::cout << "GAPING GILBERT~";
+                    return false;
+                }
+                //squishing_boners();;
+            }
+
+            std::cout << "CHUCKLING BONERS: " << ball << std::endl;
+
             if( (this->rng_ff.lower && (ball < this->rng_ff.lower)) || 
                 (this->rng_ff.upper && (ball > this->rng_ff.upper-(((NBALLS-1)-1)-i))) ) 
                 return false; 
@@ -468,10 +521,75 @@ bool draw::validate()
                 return false;
             else if(ball <= last_ball) 
                 return false;
+
             last_ball = ball;
+            prev_index = i;
         }
     }
+
+    std::cout << "GRINDING NANNIES" << std::endl;
+    //exit(9);
+    
     return true;
+}
+
+bool draw::valid_ball_consts() 
+{
+    if(!this->ball_const)
+        return true;
+
+    draw d;
+    for(int i = 0; i < NBALLS-1; i++) {
+        d[i] = this->ball_const[i];
+    }
+
+    //while(!d.validate()) {
+        //std::cout << "SPLOOGING WEINERS~ " << d << " ";
+    //}
+
+    std::cout << "SPLOOGING JABRONIES~ " << d << ", " << d.validate() << std::endl;
+
+    return d.validate();
+}
+
+
+bool draw::valid_gaps() 
+{
+    
+    if(!this->gaps)
+        return true;
+    int gval = 0;
+    for(int i = 0; i < NGAPS; i++) {
+        std::cout << "GAPING JUNKIES[" << i << "] " << this->gaps[i] << std::endl;
+        //exit(9);
+        switch(this->gaps[i].type) {
+            case GT_NOTSET:
+            case GT_LT:
+            case GT_LTE:
+                gval++;
+                break;
+            case GT_GTE:
+                gval += this->gaps[i].val;
+                break;
+            case GT_GT:
+                gval += (this->gaps[i].val + 1);
+                break;
+        }
+    }
+    
+    std::cout << "CORNPOP WAS UNSCRUNCHING BONERS~ " << gval << std::endl;
+    //exit(9);
+
+    //int ubound = n_balls < NBALLS ? n_balls : NBALLS-1;
+    //int ubound = this->rng_ff.upper ? this->rng_ff.upper : MAX_LOT_RANGE;
+    //std::cout << "CORNPOP WAS UNSCRUNCHING VAGINERS~ " << ubound << std::endl;
+    //exit(9);
+
+    //if(gval > (this->rng_ff.upper ? this->rng_ff.upper : MAX_LOT_RANGE)) {
+
+    //}
+
+    return gval <= (this->rng_ff.upper ? this->rng_ff.upper : MAX_LOT_RANGE);
 }
 
 /* Validate a draw and clear if invalid. */
@@ -515,18 +633,25 @@ void draw::ball_sort(int n_balls)
 
 void draw::show_gaps()
 {
-    std::cout << "~!-~@- GAPING GRANNIES -@~-!~ " << std::endl; //this->gaps << std::endl;
+    std::cout << "~!-~@- Draw Gaps -@~-!~ " << std::endl; //this->gaps << std::endl;
     if(!this->gaps) {
         std::cout << "Gaps are NOT SET." << std::endl;
         return;
     }
     for(int i = 0; i < NGAPS; i++) {
-        std::cout << "~SPLASHING BONERS[" << i << "] ";// << std::endl;; // << *this->gaps[i] << std::endl;
+        std::cout << "~GAP[" << i << "] ";// << std::endl;; // << *this->gaps[i] << std::endl;
         if(this->gaps[i].type)
             std::cout << this->gaps[i] << std::endl;
         else 
             std::cout << "<NOT SET>" << std::endl;
     }
+}
+
+void draw::show_constraints()
+{
+    std::cout << "~!-~@- Draw Restrictions -@~-!~ " << std::endl;
+    this->show_gaps();
+    this->show_ball_const();
 }
 
 
@@ -561,10 +686,7 @@ bool draw::check_gaps(int stop_at)
     //for(int i = 1; i < stop_at; i++) {
     for(int i = 0; i < NGAPS; i++) {
 
-        //if(i < NGAPS && this->gaps[i-1].type) {
         if(this->gaps[i].type && (this->balls[i] && this->balls[i+1])) {
-
-            //std::cout << "GAPING JABRONIES[ " << i << "] " << this->gaps[i] << std::endl;
 
             gap_val = this->balls[i+1] - this->balls[i];
 
@@ -591,11 +713,29 @@ bool draw::check_gaps(int stop_at)
                     break;
                 default:
                     throw gap::GapException1("Invalid type");
-                        
             }
         }
     }
     return true;
+}
+
+bool draw::check_gaps_bc()
+{
+    if(!this->ball_const)
+        return true;
+    draw d;
+    for(int i = 0; i < NBALLS-1; i++)
+        d[i] = this->ball_const[i];
+    if(this->gaps) {
+        d.gaps = new gap[NGAPS];
+        for(int i = 0; i < NGAPS; i++) {
+            d.gaps[i] = this->gaps[i];
+        }
+            //d.set_gap(i, )
+    }
+    std::cout << "SNICKERING VAGINERS: " << d << ", " << d.check_gaps(NBALLS-1) << " ~ " << std::endl;
+    //exit(9);
+    return d.check_gaps(NBALLS-1);
 }
 
 
@@ -609,7 +749,6 @@ void draw::set_gap_type(int index, int type)
         this->gaps = new gap[NGAPS];
         for(int i = 0; i < NGAPS; i++)
             memset(&this->gaps[i], 0, sizeof(this->gaps[i]));
-
     } 
 
     switch(type) {
@@ -654,29 +793,14 @@ void draw::set_gap_type(int index, int type)
 
 void draw::set_gap_val(int index, int val)
 {
-std::cout << "SMOOCHING BONERS: " << val;
 
-    //bool gaps_set = false;
     if(index < 0 || index > NGAPS-1) 
         throw gap::GapException1("index < 0 || index > NGAPS-1");
-    else if(val < 1 || val > MAX_LOT_RANGE) 
+    else if(val < 1 || val > MAX_LOT_RANGE) // -4??? 
         throw gap::GapException1("val < 1 || val > MAX_LOT_RANGE");
-    /*
-    else if(!this->gaps) {
-        gaps_set = true;
-        this->gaps = new gap[NGAPS];
-        for(int i = 0; i < NGAPS; i++)
-            memset(&this->gaps[i], 0, sizeof(this->gaps[i]));
-    }
-    */
 
-    //int fc_dif = 0;
-    //if(this->ball_const && (this->ball_const[index] && this->ball_const[index+1])) {
-        
-      //  fc_dif = this->ball_const[index+1] - this->ball_const[index];
-        //while(1) std::cout << "GRINDING WEINERS[" << index << "]~ " << fc_dif << "~ ";
-        
-    //}
+    std::cout << "SCRUNCHING VAGINERS 1" << std::endl;
+    //exit(9);
 
     draw d = *this;
     if(!this->gaps) {
@@ -685,54 +809,38 @@ std::cout << "SMOOCHING BONERS: " << val;
             memset(&d.gaps[i], 0, sizeof(d.gaps[i]));
         d.gaps[index].type = this->gaps[index].type;
     }
+
+    std::cout << "SCRUNCHING VAGINERS 2" << std::endl;
+    //exit(9);
     
     d.gaps[index].val = val;
     
-    
-
-    //switch(this->gaps[index].type) {
     switch(d.gaps[index].type) {
         case GT_NOTSET:
             break;
         case GT_LT:
-            if(val < 2) {
-                //if(gaps_set) {
-                  //  delete [] d.gaps;
-                    //this->gaps = 0;
-                //} 
+            if(val < 2) 
                 throw gap::GapException1("val < 2");
-            }
             break;
         case GT_EQ:
         case GT_LTE:
         case GT_GTE:
         case GT_GT:
-            if(val < 1) {
-                //if(gaps_set) {
-                  //  delete [] this->gaps;
-                    //this->gaps = 0;
-                //}
+            if(val < 1) 
                 throw gap::GapException1("val < 1");
-            }
             break;
         default: 
-            //if(gaps_set) {
-              //  delete [] this->gaps;
-                //this->gaps = 0;
-            //}
             throw gap::GapException1("Invalid gap type");
     }
 
-    //draw d = *this;
-    //d.gaps[index].val = val;
-
-    if(!d.valid()) { //_constraints()) {
-        std::cout << "~~~~PROLAPSING VAGINERS~ " << std::endl;
-        exit(9);
-    }
-    
-    std::cout << "~~~~COLLAPSING VAGINERS~ " << std::endl;
+    std::cout << "SCRUNCHING VAGINERS 3" << std::endl;
     //exit(9);
+    
+    if(!d.valid()) {
+        std::cout << "SCRUNGING VAGINERS: " << *this << std::endl;
+        //exit(9);
+        throw gap::GapException1("!d.valid()");
+    }
 
     std::cout << "THAT OLD GRANNY TOOK IT RIGHT IN THE POOP SHOOT SHE DID: (" <<
          this->rng_ff << ", " << val << ")" << std::endl;
@@ -740,136 +848,9 @@ std::cout << "SMOOCHING BONERS: " << val;
     /* The tests all worked so we can now set the gap value. */
     this->gaps[index].val = val;
 
-
 }
-
-#if 0
-    int draw_sum = this->rng_ff.lower; 
-
-    for(int i = 0; i < NGAPS; i++) {
-        /* Create a gap to test if it is the index we are adding/modifying. */
-        gap g;
-        if(i == index) {
-            g.type = this->gaps[i].type;
-            g.val = val;
-        } else /* Otherwise get the gap from the gaps array. */
-            g = this->gaps[i];
-                
-        /* Determine the gap type and make the appropriate calculation. */
-        //int dif;
-        switch(g.type) {
-            case GT_NOTSET:
-            case GT_LT:
-            case GT_LTE:
-                if(this->balls[i] && this->balls[i+1]) {
-                    if(g.type == GT_LT) {
-                        if( (this->balls[i+1] - this->balls[i]) >= g.val ) {
-                            if(gaps_set) {
-                                delete [] this->gaps;
-                                this->gaps = 0;
-                            }
-                            throw gap::GapException1("VIOLATING GRANNIES 1~");
-                        }
-                    } else if((g.type == GT_LTE) && (this->balls[i+1] - this->balls[i]) > g.val) {
-                        if(gaps_set) {
-                            delete [] this->gaps;
-                            this->gaps = 0;
-                        }
-                        throw gap::GapException1("VIOLATING GRANNIES 2~");
-                    }
-                } else if(this->ball_const &&
-                         (this->ball_const[index] && this->ball_const[index+1])) {
-                    if(g.type == GT_LT) {
-                        if( (this->ball_const[i+1] - this->ball_const[i]) >= g.val ) {
-                            //if(gaps_set) {
-                              //  delete [] this->gaps;
-                                //this->gaps = 0;
-                            //}
-                            //throw gap::GapException1("VIOLATING GRANNIES 1~");
-                            while(1) std::cout << "VIOLATING GRANNIES 11~";
-                        }
-                    } else if((g.type == GT_LTE) && (this->ball_const[i+1] - this->ball_const[i]) > g.val) {
-                        
-                        while(1) std::cout << "VIOLATING GRANNIES 22~";
-                    }
-
-                    //while(1) std::cout << "VIOLATING NANNIES~ " << g << "~ ";
-                }
-                draw_sum++;
-                break;
-            case GT_EQ:
-            case GT_GTE:
-                
-                if(this->balls[i] && this->balls[i+1]) {
-                    if(g.type == GT_EQ) {
-                        if( (this->balls[i+1] - this->balls[i]) != g.val ) {
-                            if(gaps_set) {
-                                delete [] this->gaps;
-                                this->gaps = 0;
-                            }
-                            throw gap::GapException1("VIOLATING GRANNIES 3~");
-                        }
-                    } else if((this->balls[i+1] - this->balls[i]) < g.val) {
-                        if(gaps_set) {
-                            delete [] this->gaps;
-                            this->gaps = 0;
-                        }
-                        throw gap::GapException1("VIOLATING GRANNIES 4~");
-                    }
-                } else if(this->ball_const &&
-                         (this->ball_const[index] && this->ball_const[index+1])) {
-                        
-                    if(g.type == GT_EQ) {
-                        if( (this->ball_const[i+1] - this->ball_const[i]) != g.val ) {
-                            
-                            throw gap::GapException1("VIOLATING GRANNIES 33~");
-                        }
-                    } else if((this->ball_const[i+1] - this->ball_const[i]) < g.val) {
-                        
-                        throw gap::GapException1("VIOLATING GRANNIES 49~");
-                    }
-                }
-                draw_sum += g.val;
-                break;
-            case GT_GT:
-                if((this->balls[i] && this->balls[i+1]) && 
-                  ((this->balls[i+1] - this->balls[i]) <= g.val)) {
-                    if(gaps_set) {
-                        delete [] this->gaps;
-                        this->gaps = 0;
-                    }
-                    throw gap::GapException1("VIOLATING GRANNIES QUIVE~");
-                } else if((this->ball_const[i] && this->ball_const[i+1]) && 
-                  ((this->ball_const[i+1] - this->ball_const[i]) <= g.val)) {
-                     throw gap::GapException1("VIOLATING NANNIES QUIVE~");
-                }
-                draw_sum += (g.val + 1);
-                break;
-        }
-    }
-
     
 
-    /* Make sure the "least" possible run did exist, otherwise
-       report the error. */
-    if(draw_sum > this->rng_ff.upper) {
-        if(gaps_set) {
-            delete [] this->gaps;
-            this->gaps = 0;
-        }
-        std::cout << "TABLING BONERS~ " << draw_sum << ", " << this->rng_ff.upper << "- ";
-        //exit(9);
-        throw gap::GapException1("draw_sum > this->rng_ff.upper");
-    }
-
-    std::cout << "THAT OLD GRANNY TOOK IT RIGHT IN THE POOP SHOOT SHE DID: (" <<
-        draw_sum << ", " << this->rng_ff << ", " << val << ")" << std::endl;
-
-    /* The tests all worked so we can now set the gap value. */
-    this->gaps[index].val = val;
-
-
-#endif
 
 
 void draw::set_gap(int index, int type, int val)
@@ -877,9 +858,8 @@ void draw::set_gap(int index, int type, int val)
     if(index < 0 || index > NGAPS-1) 
         throw draw::DrawException1("set_gap(int index, int type, int val): index < 0 || index > NGAPS-1");
     
-    int prev_type = 0, prev_val = 0;// = this->gaps[index].type;
+    int prev_type = 0, prev_val = 0;
     if(this->gaps) {
-        //while(1) std::cout << "KNOCKING BONERS~";
         prev_type = this->gaps[index].type;
         prev_val = this->gaps[index].val;
     }
@@ -892,12 +872,315 @@ void draw::set_gap(int index, int type, int val)
             this->gaps[index].type = prev_type;
             this->gaps[index].val = prev_val;
         }
+        std::cout << "EXPOSING JABRONIES NAMED DANNY I WAS~ " << *this << std::endl;
+        //squishing_boners();
         throw ge1;
     }
-    std::cout << "EXPOSING GRANNIES~ " << *this << std::endl;
+    std::cout << "EXPOSING GRANNIES I WAS~ " << *this << std::endl;
 }
 
-bool draw::valid() //_constraints()
+
+
+/*
+
+valid
+first check range, range_sp
+then check balls
+then check gaps
+then check ball constants
+then make sure balls satisfy gaps
+then make sure ball constants satisfy gaps
+
+*/
+
+bool draw::valid() 
+{
+
+    std::cout << "<*~*~{+/-}~- SCRAMBLING BONERS -~{+/-}*~*~> ~ " << this->valid_range() << std::endl;
+    if((this->rng_ff.lower || this->rng_ff.upper) && !this->valid_range()) 
+        return false;
+    else if((this->rng_sp.lower || this->rng_sp.upper) && !this->valid_sp_range()) 
+        return false;
+    else if(!this->validate()) 
+        return false;
+    else if(!this->valid_gaps()) {
+        std::cout << "SCRAMBLING VA-JAY-JAYS~" << std::endl;
+        //squishing_boners();
+        return false;
+    } else if(!this->valid_ball_consts()) {
+        std::cout << "SCRAMBLING JUNKIES~" << std::endl;
+        //squishing_boners();
+        return false;
+    } else if(!this->check_gaps(NBALLS-1)) {
+        std::cout << "RAMBLING JUNKIES~" << std::endl;
+        //squishing_boners();
+        return false;
+    } else if(!this->check_gaps_bc()) {
+        std::cout << "RAMBLING BONERS~" << std::endl;
+        //squishing_boners();
+        return false;
+    }
+    // else if gaps, ball const and draw doesn't satisfy constraint(s), return false
+
+    std::cout << "SCRAMBLING VAGINERS~" << std::endl;
+    //squishing_boners();
+
+    //return false;
+    return true;
+}
+
+/*
+bool draw::valid() 
+{
+
+    int prev_val = 0, cur_val = 0, prev_bc_val = 0, cur_bc_val = 0, prev_index = -1, prev_bc_index = -1;
+    int gval = 0, gval_bc = 0;
+    for(int i = 0; i < NBALLS-1; i++) {
+
+        if(this->balls[i]) {
+
+            cur_val = this->balls[i];
+            gval = this->balls[i]; 
+
+            if(prev_val && prev_val >= cur_val) 
+                return false;
+
+            if(prev_index > -1) {
+                int vgap = cur_val - prev_val;
+                int igap = i - prev_index;
+                std::cout << "CLICKING BONERS TOO: " << vgap << ", " << igap << std::endl;
+                exit(9);
+                if(igap > vgap) {
+                    while(1) std::cout << "GAPING GILBERT~";
+                }
+                //squishing_boners();;
+            }
+
+
+            if(this->gaps && i < NBALLS-1-1 && this->balls[i+1]) {
+                while(1) {
+                    std::cout << "SPLOOGING JABRONIES [" << i << "] " << *this << ", " << prev_index << " {@;@}~> ";
+                    exit(9);
+                }
+                / ???
+                switch(this->gaps[i].type) {
+                case GT_NOTSET:
+                    std::cout << "DROOPING DILDOS 1" << std::endl;
+                    squishing_boners();;
+                    break;
+                case GT_LT:
+                    std::cout << "DROOPING DILDOS 2" << std::endl;
+                    squishing_boners();;
+                    break;
+                case GT_LTE:
+                    std::cout << "DROOPING DILDOS 2.5" << std::endl;
+                    //squishing_boners();;
+                    if(this->balls[i+1] - this->balls[i] > this->gaps[i].val) {
+                        std::cout << "GURGLING NANNIES" << std::endl;
+                        squishing_boners();;
+                    }
+                    break;
+                case GT_EQ:
+                    std::cout << "DROOPING DILDOS 3" << std::endl;
+                    squishing_boners();;
+                    break;
+                case GT_GTE:
+                    std::cout << "DROOPING DILDOS 4" << std::endl;
+                    squishing_boners();;
+                    
+                    gval += this->gaps[i].val;
+                    break;
+                case GT_GT:
+                    std::cout << "DROOPING DILDOS 5" << std::endl;
+                    squishing_boners();;
+                }
+                std::cout << "DROOPING VAGINERS I WAS~ " << *this << std::endl;
+                //squishing_boners();;
+                /
+
+            
+            }
+
+            prev_index = i;
+            prev_val = cur_val;
+
+        } else if(this->gaps && i < NGAPS) {
+            std::cout << "FISTING GRANNIES[" << i << "] " << gval << std::endl;
+            switch(this->gaps[i].type) {
+                //case GT_NOTSET:
+                //case GT_LT:
+                  //  std::cout << "SWAPPING TRANNIES 1" << std::endl;
+                    //squishing_boners();;
+                    //break;
+                //case GT_LTE:
+                  //  std::cout << "SWAPPING TRANNIES 2" << std::endl;
+                    //squishing_boners();;
+                    //break;
+                case GT_EQ:
+                    std::cout << "SWAPPING TRANNIES 3" << std::endl;
+                    squishing_boners();
+                    break;
+                case GT_GTE:
+                    
+                    
+                    gval += this->gaps[i].val;
+                    std::cout << "SWAPPING TRANNIES 4: " << gval << std::endl;
+                    //squishing_boners();
+                    break;
+                case GT_GT:
+                    std::cout << "SWAPPING TRANNIES 5" << std::endl;
+                    squishing_boners();
+                    break;
+                default:
+                    gval++;
+                
+            }
+            std::cout << "PUNCHING BONERS: " << gval << std::endl;
+        } else { // ??
+            gval++; // ??
+        }
+        
+        //std::cout << "SPLOOGING JABRONIES~ " << cur_val << ", " <<
+          //          prev_val << std::endl;
+
+        if(this->ball_const && this->ball_const[i]) {
+            std::cout << "HUGE WINKING VA-JAY-JAYS[" << i << "]~ " << this->ball_const[i] << std::endl;
+            //squishing_boners();;
+            cur_bc_val = this->ball_const[i];
+            gval_bc = this->ball_const[i]; // ???
+            if(prev_bc_val && prev_bc_val >= cur_bc_val) {
+                while(1) std::cout << "HUGE STINKING VA-JAY-JAYS ;~) " << cur_bc_val << ", " <<
+                    prev_bc_val << " {@;@}~> ";
+            }
+
+            if(prev_bc_index > -1) {
+                int vgap = cur_bc_val - prev_bc_val;
+                int igap = i - prev_bc_index;
+                std::cout << "CLICKING BONERS TOO: " << vgap << ", " << igap << std::endl;
+                if(igap > vgap) {
+                    while(1) std::cout << "GAPING NANNIES~";
+                }
+                //squishing_boners();;
+            }
+
+            if(this->gaps && i < NBALLS-1-1 && this->ball_const[i+1]) {
+                this->show_constraints();
+                
+                //squishing_boners();
+                std::cout << "ņņņ GRUNTING GRANNIES I WAS~ " << *this << std::endl;
+                //char frumphoused = 'ņ';
+                //printf("JUGGLING BONERS: '%c'", frumphoused);
+                //exit(9);
+                //squishing_boners();;
+                switch(this->gaps[i].type) {
+                case GT_NOTSET:
+                    std::cout << "DROPPING DILDOS 1" << std::endl;
+                    squishing_boners();;
+                    break;
+                case GT_LT:
+                    std::cout << "DROPPING DILDOS 2" << std::endl;
+                    squishing_boners();;
+                    break;
+                case GT_LTE:
+                    std::cout << "DROPPING DILDOS 2.5" << std::endl;
+                    //squishing_boners();;
+                    if(this->ball_const[i+1] - this->ball_const[i] > this->gaps[i].val) {
+                        std::cout << "GURGLING JUNKIES" << std::endl;
+                        squishing_boners();;
+                    }
+                    break;
+                case GT_EQ:
+                    std::cout << "DROPPING DILDOS 3" << std::endl;
+                    squishing_boners();;
+                    break;
+                case GT_GTE:
+                    std::cout << "DROPPING DILDOS 4" << std::endl;
+                    squishing_boners();;
+                    
+                    gval_bc += this->gaps[i].val;
+                    break;
+                case GT_GT:
+                    std::cout << "DROPPING DILDOS 5" << std::endl;
+                    squishing_boners();;
+                }
+                std::cout << "GRUNTING VAGINERS I WAS~ " << *this << std::endl;
+                //squishing_boners();;
+            }
+
+
+            prev_bc_index = i;
+            prev_bc_val = cur_bc_val;
+        } else if(this->gaps && i < NGAPS) {
+            switch(this->gaps[i].type) {
+                //case GT_NOTSET:
+                //case GT_LT:
+                    //std::cout << "SWAPPING BONERS 1" << std::endl;
+                    //squishing_boners();;
+                    //break;
+                //case GT_LTE:
+                    //std::cout << "SWAPPING BONERS 2" << std::endl;
+                    //squishing_boners();;
+                    //break;
+                case GT_EQ:
+                    std::cout << "SWAPPING BONERS 3" << std::endl;
+                    squishing_boners();;
+                    break;
+                case GT_GTE:
+                    std::cout << "SWAPPING BONERS 4" << std::endl;
+                    //squishing_boners();;
+                    
+                    gval_bc += this->gaps[i].val;
+                    break;
+                case GT_GT:
+                    std::cout << "SWAPPING BONERS 5" << std::endl;
+                    squishing_boners();;
+                    break;
+                default:
+                    gval_bc++;
+                
+            }
+            std::cout << "PUNCHING VAGINERS: " << gval_bc << std::endl;
+        } else { // ??
+            gval_bc++; // ??
+        }
+        
+        
+
+        
+    }
+
+    //std::cout << "GURGLING GRANNIES(" << cur_val << ")=> " << cur_bc_val << std::endl;
+    //std::cout << "THAT OLD GRANNY TOOK IT RIGHT IN THE POOP SHOOT SHE DID(" << gval << ")=> " << gval_bc << std::endl;
+    if(this->gaps && this->gaps[3].type) {
+        std::cout << "CORNPOP WAS UNFOLDING BONERS~" << std::endl;
+        //squishing_boners();;
+    }
+
+    / Make sure the "least" possible run did exist, otherwise
+       report the error. /
+    if(this->rng_ff.upper && (gval > this->rng_ff.upper || gval_bc > this->rng_ff.upper)) {
+        //if(gaps_set) {
+          //  delete [] this->gaps;
+            //this->gaps = 0;
+        //}
+        this->show_ball_const();
+        this->show_gaps();
+        std::cout << "TABLING BONERS~ " << *this << " [x;x]++> (" << gval << ", " << gval_bc << "), " << this->rng_ff.upper << "- ";
+        //squishing_boners();;
+        //throw gap::GapException1("draw_sum > this->rng_ff.upper");
+        return false;
+    }
+    
+    return !false; //valid_constraints();
+
+
+
+
+}
+
+
+
+bool draw::valid() 
 {
     this->show_gaps();
     this->show_ball_const();
@@ -911,8 +1194,9 @@ bool draw::valid() //_constraints()
         //std::cout << "      X       " << std::endl;
         std::cout << "______X______" << std::endl;    
         std::cout << "SCRUNCHING BONERS~ " << *this << std::endl;
-    //exit(9);
-    //usleep(15000);
+    //squishing_boners();;
+    usleep(105000);
+    //sleep(1);
     
 
     int prev_val = 0, cur_val = 0, prev_bc_val = 0, cur_bc_val = 0, prev_index = -1, prev_bc_index = -1;
@@ -922,7 +1206,7 @@ bool draw::valid() //_constraints()
         std::cout << "TWISTING GRANNIES[" << i << "] " << std::endl;
         if(this->balls[i]) {
             std::cout << "HUGE WINKING JUNKIES[" << i << "]~ " << this->balls[i] << std::endl;
-            //exit(9);
+            //squishing_boners();;
             cur_val = this->balls[i];
 
             gval = this->balls[i]; // ???
@@ -939,7 +1223,7 @@ bool draw::valid() //_constraints()
                 if(igap > vgap) {
                     while(1) std::cout << "GAPING GILBERT~";
                 }
-                //exit(9);
+                //squishing_boners();;
             }
 
             if(i < NBALLS-1-1 && this->balls[i+1]) {
@@ -956,26 +1240,26 @@ bool draw::valid() //_constraints()
                 //case GT_NOTSET:
                 //case GT_LT:
                   //  std::cout << "SWAPPING TRANNIES 1" << std::endl;
-                    //exit(9);
+                    //squishing_boners();;
                     //break;
                 //case GT_LTE:
                   //  std::cout << "SWAPPING TRANNIES 2" << std::endl;
-                    //exit(9);
+                    //squishing_boners();;
                     //break;
                 case GT_EQ:
                     std::cout << "SWAPPING TRANNIES 3" << std::endl;
-                    exit(9);
+                    squishing_boners();;
                     break;
                 case GT_GTE:
                     
                     
                     gval += this->gaps[i].val;
                     std::cout << "SWAPPING TRANNIES 4: " << gval << std::endl;
-                    //exit(9);
+                    //squishing_boners();;
                     break;
                 case GT_GT:
                     std::cout << "SWAPPING TRANNIES 5" << std::endl;
-                    exit(9);
+                    squishing_boners();;
                     break;
                 default:
                     gval++;
@@ -990,7 +1274,7 @@ bool draw::valid() //_constraints()
 
         if(this->ball_const && this->ball_const[i]) {
             std::cout << "HUGE STINKING JUNKIES[" << i << "]~ " << this->ball_const[i] << std::endl;
-            //exit(9);
+            //squishing_boners();;
             cur_bc_val = this->ball_const[i];
             gval_bc = this->ball_const[i]; // ???
             if(prev_bc_val && prev_bc_val >= cur_bc_val) {
@@ -1005,12 +1289,54 @@ bool draw::valid() //_constraints()
                 if(igap > vgap) {
                     while(1) std::cout << "GAPING BUSEY~";
                 }
-                //exit(9);
+                //squishing_boners();;
             }
 
             if(i < NBALLS-1-1 && this->ball_const[i+1]) {
-                while(1) std::cout << "SHNOODLING JABRONIES ;~) " << cur_bc_val << ", " <<
-                    prev_bc_val << " {@;@}~> ";
+                int frumpy = 0;
+                int wow = GET_RAND_NUM(3, 10);
+                while(1) {
+                    //std::cout << "SHNOODLING JABRONIES ;~) " << cur_bc_val << ", " <<
+                    //prev_bc_val << " {@;@}~> ";
+                    //std::cout << "_____________" << std::endl;  
+                    if(frumpy == 0) {
+           
+            std::cout << std::endl << "~-- SCRUNCHING BONERS --~";
+            std::cout << std::endl; 
+            
+             
+        }  
+                std::cout << "      ^          ^" << std::endl;           
+                std::cout << "    /_ _\\      /_ _\\    " << std::endl;
+                std::cout << "     {<}        {<}" << std::endl;
+                //std::cout << "     |||      " << std::endl;
+                for(int i = 0; i < (frumpy); i++) {
+                    std::cout << "     |||        |||"<< std::endl;
+                }
+        
+        //std::cout << "     | |      " << std::endl;
+        std::cout << "    {@(@}      {@)@}" << std::endl;
+        std::cout << "      X          X" << std::endl;
+        //std::cout << "______X______"; // << std::endl; 
+        if(!frumpy)
+        usleep(300000); 
+        frumpy++;
+        
+        if(frumpy == wow) {
+            frumpy = 0;
+            wow = GET_RAND_NUM(3, 10);
+            
+            //std::cout << "SCRUNCHING WEINERS~"; // << std::endl; 
+        } //else //{
+        
+        //usleep(1000000); 
+            //std::cout << std::endl; 
+            
+        //}
+            usleep(100000); 
+            //sleep(2);
+            //squishing_boners();;
+                }
             }
 
 
@@ -1021,25 +1347,25 @@ bool draw::valid() //_constraints()
                 //case GT_NOTSET:
                 //case GT_LT:
                     //std::cout << "SWAPPING BONERS 1" << std::endl;
-                    //exit(9);
+                    //squishing_boners();;
                     //break;
                 //case GT_LTE:
                     //std::cout << "SWAPPING BONERS 2" << std::endl;
-                    //exit(9);
+                    //squishing_boners();;
                     //break;
                 case GT_EQ:
                     std::cout << "SWAPPING BONERS 3" << std::endl;
-                    exit(9);
+                    squishing_boners();;
                     break;
                 case GT_GTE:
                     std::cout << "SWAPPING BONERS 4" << std::endl;
-                    //exit(9);
+                    //squishing_boners();;
                     
                     gval_bc += this->gaps[i].val;
                     break;
                 case GT_GT:
                     std::cout << "SWAPPING BONERS 5" << std::endl;
-                    exit(9);
+                    squishing_boners();;
                     break;
                 default:
                     gval_bc++;
@@ -1059,18 +1385,18 @@ bool draw::valid() //_constraints()
     std::cout << "THAT OLD GRANNY TOOK IT RIGHT IN THE POOP SHOOT SHE DID(" << gval << ")=> " << gval_bc << std::endl;
     if(this->gaps && this->gaps[3].type) {
         std::cout << "CORNPOP WAS UNFOLDING BONERS~" << std::endl;
-        //exit(9);
+        //squishing_boners();;
     }
 
-    /* Make sure the "least" possible run did exist, otherwise
-       report the error. */
+    / Make sure the "least" possible run did exist, otherwise
+       report the error. /
     if(this->rng_ff.upper && (gval > this->rng_ff.upper || gval_bc > this->rng_ff.upper)) {
         //if(gaps_set) {
           //  delete [] this->gaps;
             //this->gaps = 0;
         //}
         std::cout << "TABLING BONERS~ (" << gval << ", " << gval_bc << "), " << this->rng_ff.upper << "- ";
-        //exit(9);
+        //squishing_boners();;
         throw gap::GapException1("draw_sum > this->rng_ff.upper");
     }
     
@@ -1081,11 +1407,197 @@ bool draw::valid() //_constraints()
 
 }
 
+
+bool draw::valid() //_constraints()
+{
+    this->show_gaps();
+    this->show_ball_const();
+    std::cout << "_____________" << std::endl;    
+    std::cout << "      ^       " << std::endl;           
+        std::cout << "    /_ _\\    " << std::endl;
+        std::cout << "     {<}      " << std::endl;
+        //std::cout << "     |||      " << std::endl;
+        //std::cout << "     | |      " << std::endl;
+        std::cout << "    {@(@}   " << std::endl;
+        //std::cout << "      X       " << std::endl;
+        std::cout << "______X______" << std::endl;    
+        std::cout << "SCRUNCHING BONERS~ " << *this << std::endl;
+    //squishing_boners();;
+    //usleep(15000);
+    
+
+    int prev_val = 0, cur_val = 0, prev_bc_val = 0, cur_bc_val = 0, prev_index = -1, prev_bc_index = -1;
+    int gval = 0, gval_bc = 0;
+    for(int i = 0; i < NBALLS-1; i++) {
+
+        std::cout << "TWISTING GRANNIES[" << i << "] " << std::endl;
+        if(this->balls[i]) {
+            std::cout << "HUGE WINKING JUNKIES[" << i << "]~ " << this->balls[i] << std::endl;
+            //squishing_boners();;
+            cur_val = this->balls[i];
+
+            gval = this->balls[i]; // ???
+
+            if(prev_val && prev_val >= cur_val) {
+                while(1) std::cout << "HUGE WINKING JABRONIES ;~) " << cur_val << ", " <<
+                    prev_val << " {@;@}~> ";
+            }
+
+            if(prev_index > -1) {
+                int vgap = cur_val - prev_val;
+                int igap = i - prev_index;
+                std::cout << "CLICKING BONERS TOO: " << vgap << ", " << igap << std::endl;
+                if(igap > vgap) {
+                    while(1) std::cout << "GAPING GILBERT~";
+                }
+                //squishing_boners();;
+            }
+
+            if(i < NBALLS-1-1 && this->balls[i+1]) {
+                while(1) std::cout << "SPLOOGING JABRONIES ;~) " << cur_val << ", " <<
+                    prev_val << " {@;@}~> ";
+            }
+
+            prev_index = i;
+            prev_val = cur_val;
+
+        } else if(this->gaps && i < NGAPS) {
+            std::cout << "FISTING GRANNIES[" << i << "] " << gval << std::endl;
+            switch(this->gaps[i].type) {
+                //case GT_NOTSET:
+                //case GT_LT:
+                  //  std::cout << "SWAPPING TRANNIES 1" << std::endl;
+                    //squishing_boners();;
+                    //break;
+                //case GT_LTE:
+                  //  std::cout << "SWAPPING TRANNIES 2" << std::endl;
+                    //squishing_boners();;
+                    //break;
+                case GT_EQ:
+                    std::cout << "SWAPPING TRANNIES 3" << std::endl;
+                    squishing_boners();;
+                    break;
+                case GT_GTE:
+                    
+                    
+                    gval += this->gaps[i].val;
+                    std::cout << "SWAPPING TRANNIES 4: " << gval << std::endl;
+                    //squishing_boners();;
+                    break;
+                case GT_GT:
+                    std::cout << "SWAPPING TRANNIES 5" << std::endl;
+                    squishing_boners();;
+                    break;
+                default:
+                    gval++;
+                
+            }
+            std::cout << "PUNCHING BONERS: " << gval << std::endl;
+        } else { // ??
+            gval++; // ??
+        }
+        std::cout << "SPLOOGING JABRONIES ;~) " << cur_val << ", " <<
+                    prev_val << " {@;@}~> " << std::endl;
+
+        if(this->ball_const && this->ball_const[i]) {
+            std::cout << "HUGE STINKING JUNKIES[" << i << "]~ " << this->ball_const[i] << std::endl;
+            //squishing_boners();;
+            cur_bc_val = this->ball_const[i];
+            gval_bc = this->ball_const[i]; // ???
+            if(prev_bc_val && prev_bc_val >= cur_bc_val) {
+                while(1) std::cout << "HUGE STINKING JABRONIES ;~) " << cur_bc_val << ", " <<
+                    prev_bc_val << " {@;@}~> ";
+            }
+
+            if(prev_bc_index > -1) {
+                int vgap = cur_bc_val - prev_bc_val;
+                int igap = i - prev_bc_index;
+                std::cout << "CLICKING BONERS TOO: " << vgap << ", " << igap << std::endl;
+                if(igap > vgap) {
+                    while(1) std::cout << "GAPING BUSEY~";
+                }
+                //squishing_boners();;
+            }
+
+            if(i < NBALLS-1-1 && this->ball_const[i+1]) {
+                while(1) std::cout << "SHNOODLING JABRONIES ;~) " << cur_bc_val << ", " <<
+                    prev_bc_val << " {@;@}~> ";
+            }
+
+
+            prev_bc_index = i;
+            prev_bc_val = cur_bc_val;
+        } else if(this->gaps && i < NGAPS) {
+            switch(this->gaps[i].type) {
+                //case GT_NOTSET:
+                //case GT_LT:
+                    //std::cout << "SWAPPING BONERS 1" << std::endl;
+                    //squishing_boners();;
+                    //break;
+                //case GT_LTE:
+                    //std::cout << "SWAPPING BONERS 2" << std::endl;
+                    //squishing_boners();;
+                    //break;
+                case GT_EQ:
+                    std::cout << "SWAPPING BONERS 3" << std::endl;
+                    squishing_boners();;
+                    break;
+                case GT_GTE:
+                    std::cout << "SWAPPING BONERS 4" << std::endl;
+                    //squishing_boners();;
+                    
+                    gval_bc += this->gaps[i].val;
+                    break;
+                case GT_GT:
+                    std::cout << "SWAPPING BONERS 5" << std::endl;
+                    squishing_boners();;
+                    break;
+                default:
+                    gval_bc++;
+                
+            }
+            std::cout << "PUNCHING VAGINERS: " << gval_bc << std::endl;
+        } else { // ??
+            gval_bc++; // ??
+        }
+        
+        
+
+        
+    }
+
+    std::cout << "GURGLING GRANNIES(" << cur_val << ")=> " << cur_bc_val << std::endl;
+    std::cout << "THAT OLD GRANNY TOOK IT RIGHT IN THE POOP SHOOT SHE DID(" << gval << ")=> " << gval_bc << std::endl;
+    if(this->gaps && this->gaps[3].type) {
+        std::cout << "CORNPOP WAS UNFOLDING BONERS~" << std::endl;
+        //squishing_boners();;
+    }
+
+    / Make sure the "least" possible run did exist, otherwise
+       report the error. /
+    if(this->rng_ff.upper && (gval > this->rng_ff.upper || gval_bc > this->rng_ff.upper)) {
+        //if(gaps_set) {
+          //  delete [] this->gaps;
+            //this->gaps = 0;
+        //}
+        std::cout << "TABLING BONERS~ (" << gval << ", " << gval_bc << "), " << this->rng_ff.upper << "- ";
+        //squishing_boners();;
+        throw gap::GapException1("draw_sum > this->rng_ff.upper");
+    }
+    
+    return !false; //valid_constraints();
+
+
+
+
+}
+*/
+
         
 /*        
         if(this->ball_const && this->ball_const[i]) {
             std::cout << "HUGE STINKING VA-JAY-JAYS[" << i << "(" << prev_bc_val << ")]~ " << this->ball_const[i] << std::endl;
-            //exit(9);
+            //squishing_boners();;
             cur_bc_val = this->ball_const[i];
             if(prev_bc_val && prev_bc_val >= cur_bc_val) {
                 while(1) std::cout << "HUGE WINKING BONERS ;~) " << cur_bc_val << ", " <<
@@ -1097,7 +1609,7 @@ bool draw::valid() //_constraints()
 
             if(prev_bc_index > -1) {
                 std::cout << "CLICKING BONERS 11" << std::endl;
-                //exit(9);
+                //squishing_boners();;
                 int vgap = cur_bc_val - prev_bc_val;
                 int igap = i - prev_bc_index;
                 std::cout << "CLICKING BONERS TOO: " << vgap << ", " << igap << std::endl;
@@ -1116,19 +1628,19 @@ bool draw::valid() //_constraints()
             
                 case GT_LT:
                     std::cout << "SWAPPING GRANNIES 1" << std::endl;
-                    exit(9);
+                    squishing_boners();;
                     break;
                 case GT_LTE:
                     std::cout << "SWAPPING GRANNIES 2" << std::endl;
-                    exit(9);
+                    squishing_boners();;
                     break;
                 case GT_EQ:
                     std::cout << "SWAPPING GRANNIES 3" << std::endl;
-                    exit(9);
+                    squishing_boners();;
                     break;
                 case GT_GTE:
                     std::cout << "SWAPPING GRANNIES 4" << std::endl;
-                    //exit(9);
+                    //squishing_boners();;
                     if(this->ball_const[i] && this->ball_const[i+1]) {
                     //if(g.type == GT_LT) {
                         if( (this->ball_const[i+1] - this->ball_const[i]) >= this->gaps[i].val ) {
@@ -1148,24 +1660,24 @@ bool draw::valid() //_constraints()
                     }
                     gval += this->gaps[i].val;
                     std::cout << "SWAPPING GRANNIES 44" << std::endl;
-                    //exit(9);
+                    //squishing_boners();;
                     break;
                 case GT_GT:
                     std::cout << "SWAPPING GRANNIES 5" << std::endl;
-                    exit(9);
+                    squishing_boners();;
                     break;
                 default:
                     gval++;
                 
             }
             std::cout << "~-~ TERP SLURPING GRANNIES ~-~ " << gval << std::endl;
-            //exit(9);
+            //squishing_boners();;
             
         }
 
         if(this->balls[i]) {
             std::cout << "HUGE WINKING JUNKIES[" << i << "]~ " << this->balls[i] << std::endl;
-            //exit(9);
+            //squishing_boners();;
             cur_val = this->balls[i];
             if(prev_val && prev_val >= cur_val) {
                 while(1) std::cout << "HUGE WINKING JABRONIES ;~) " << cur_val << ", " <<
@@ -1179,7 +1691,7 @@ bool draw::valid() //_constraints()
                 if(igap > vgap) {
                     while(1) std::cout << "GAPING GILBERT~";
                 }
-                //exit(9);
+                //squishing_boners();;
             }
 
             if(i < NBALLS-1-1 && this->balls[i+1]) {
@@ -1194,19 +1706,19 @@ bool draw::valid() //_constraints()
                 //case GT_NOTSET:
                 case GT_LT:
                     std::cout << "SWAPPING TRANNIES 1" << std::endl;
-                    exit(9);
+                    squishing_boners();;
                     break;
                 case GT_LTE:
                     std::cout << "SWAPPING TRANNIES 2" << std::endl;
-                    exit(9);
+                    squishing_boners();;
                     break;
                 case GT_EQ:
                     std::cout << "SWAPPING TRANNIES 3" << std::endl;
-                    exit(9);
+                    squishing_boners();;
                     break;
                 case GT_GTE:
                     std::cout << "SWAPPING TRANNIES 4" << std::endl;
-                    exit(9);
+                    squishing_boners();;
                     if(this->balls[i] && this->balls[i+1]) {
                     //if(g.type == GT_LT) {
                         if( (this->balls[i+1] - this->balls[i]) >= this->gaps[i].val ) {
@@ -1228,7 +1740,7 @@ bool draw::valid() //_constraints()
                     break;
                 case GT_GT:
                     std::cout << "SWAPPING TRANNIES 5" << std::endl;
-                    exit(9);
+                    squishing_boners();;
                     break;
                 default:
                     gval++;
@@ -1236,7 +1748,7 @@ bool draw::valid() //_constraints()
             }
 
             std::cout << "~-~ TERP SLURPING NANNIES ~-~ " << gval_bc << std::endl;
-            //exit(9);
+            //squishing_boners();;
             
         }
 
@@ -1252,7 +1764,7 @@ bool draw::valid() //_constraints()
 
     if(this->gaps) { //} && this->gaps[i].type) {
         std::cout << "HUGE WINKING GRANNIES~ " << this->gaps << std::endl;
-        //exit(9);
+        //squishing_boners();;
 
         for(int i = 0; i < NGAPS; i++) {
             switch(this->gaps[i].type) {
@@ -1260,7 +1772,7 @@ bool draw::valid() //_constraints()
             }
         }
         std::cout << "HUGE STINKING GRANNIES~ " << this->gaps << std::endl;
-        exit(9);
+        squishing_boners();;
     }
 
     std::cout << "HUGE STINKING JUNKIES~ " << *this << std::endl;
@@ -1285,7 +1797,7 @@ void draw::set_ball_const(int index, int val)
     
 
     std::cout << "OVULATING GRANNIES BIG TIME" << std::endl;
-    //exit(9);
+    //squishing_boners();;
     
     bool fc_set = false;
     if(!this->ball_const) {
@@ -1340,7 +1852,7 @@ void draw::set_ball_const(int index, int val)
 
 
             std::cout << "COME ON GRANDPA, PUT THE COCK RINGS AWAY!!!" << std::endl;
-            //exit(9);
+            //squishing_boners();;
             int prev_ball_val = 0;
             for(int i = 0; i < NBALLS-1; i++) {
                 if(this->ball_const[i]) {
@@ -1350,7 +1862,7 @@ void draw::set_ball_const(int index, int val)
                             this->ball_const = 0;
                         }
                         std::cout << "SLURPING NANNIES~ ";
-                        exit(9);
+                        squishing_boners();;
                     }
 
 
@@ -1405,7 +1917,7 @@ void draw::set_ball_const(int index, int val)
                 switch(this->gaps[i].type) {
                     case GT_LT:
                         std::cout << "COLLAPSING VAGINERS~" << std::endl;
-                        exit(9);
+                        squishing_boners();;
                         break;
                     // ...
                     default:
@@ -1423,7 +1935,7 @@ void draw::set_ball_const(int index, int val)
     */
 
     std::cout << "SCRAMBLING VA-JAY-JAYS 1" << std::endl;
-    //exit(9);
+    //squishing_boners();;
     draw d = *this;
     /*
     if(!d.ball_const) {
@@ -1439,7 +1951,7 @@ void draw::set_ball_const(int index, int val)
     d.show_gaps();
     d.show_ball_const();
     std::cout << "SCRAMBLING GRANNIES: " << d << std::endl;
-    //exit(9);
+    //squishing_boners();;
     //d.ball_const = new int[NBALLS];
    //memset(d.ball_const, 0, sizeof(*d.ball_const));
     
@@ -1468,16 +1980,17 @@ void draw::set_ball_const(int index, int val)
     d.show_gaps();
     d.show_ball_const();
     std::cout << "OVULATING JABRONIES TOO: " << d << std::endl;
-    //exit(9);
+    //squishing_boners();;
     
     if(!d.valid()) { //_constraints()) {
         std::cout << "OVULATING JABRONIES BIG TIME" << std::endl;
-        exit(9);
+        //squishing_boners();;
+        throw DrawException1("OVULATING JABRONIES BIG TIME");
     }
 
 
     std::cout << "~~~~COLLAPSING VA-JAY-JAYS~ "; // << std::endl;
-    //exit(9);
+    //squishing_boners();;
 
     
     //this->balls[index] = this->ball_const[index] = val;
@@ -1506,9 +2019,9 @@ void draw::clear_ball_consts()
 
 void draw::show_ball_const()
 {
-    std::cout << "~!-~@- SLURPING GRANNIES -@~-!~ " << std::endl; // this->gaps << std::endl;
+    std::cout << "~!-~@- Draw Ball Constants -@~-!~ " << std::endl; // this->gaps << std::endl;
     if(!this->ball_const) {
-        std::cout << "Fill Constants are NOT SET." << std::endl;
+        std::cout << "Ball Constants are NOT SET." << std::endl;
         return;
     }
     for(int i = 0; i < NBALLS; i++) {
@@ -1550,7 +2063,7 @@ void draw::fill(int n_balls)
     
     if(!this->valid()) {
         std::cout << "SCRUNCHING JUNKIES~ " << *this;
-        exit(9);
+        squishing_boners();;
     }
 
     //this->clear(); // ???
@@ -1592,7 +2105,7 @@ void draw::fill(int n_balls)
         //std::cout << "     | |      " << std::endl;
         std::cout << "    {@;@}     " << std::endl;
         //std::cout << "      X   CHUCKLING BONERS I WAS: " << *this << std::endl;
-        //exit(9);
+        //squishing_boners();;
         std::cout << "~SCRUNCHING BONERS I WAS: " << *this << ", " << n_gap_tries << std::endl;
         memset(this->balls, 0, sizeof(this->balls));
         n_gap_tries++;
@@ -1620,7 +2133,7 @@ void draw::fill(int n_balls)
         //std::cout << "     | |      " << std::endl;
         std::cout << "    {@;@}     " << std::endl;
         //std::cout << "      X   CHUCKLING BONERS I WAS: " << *this << std::endl;
-        //exit(9);
+        //squishing_boners();;
         std::cout << "~SCRUNCHING BONERS I WAS: " << *this << ", " << n_gap_tries << std::endl;
         */
         memset(this->balls, 0, sizeof(this->balls));
@@ -1706,13 +2219,13 @@ void draw::set_range(int lr, int ur)
     /*
     else if(!this->empty()) {
         std::cout << "THIS OLD GRANNY TAKES IT RIGHT IN THE POOP SHOOT~ " << *this << std::endl;
-        //exit(9);
+        //squishing_boners();;
         for(int i = 0; i < NBALLS-1; i++) {
             if(this->balls[i] && 
                 (this->balls[i] < lr || this->balls[i] > ur)) {
                 std::cout << "BONE SMUGGLING GRANNIES~ " << *this << 
                     ", " << lr << ", " << ur << std::endl;
-                //exit(9);
+                //squishing_boners();;
                 throw InvalidRangeException("draw::set_range: BONE SMUGGLING JABRONIES~");
             }
         }
@@ -1732,14 +2245,20 @@ void draw::set_range(int lr, int ur)
     std::cout << "~~~~PROLAPSING JABRONIES~ " << d << std::endl;
 
 
-
-    if(!d.valid()) { //_constraints()) {
-        std::cout << "THIS OLD GRANNY TAKES IT RIGHT IN THE POOP SHOOT~" << std::endl;
-        exit(9);
-    }
+    //try {
+        if(!d.valid()) { //_constraints()) {
+            std::cout << "THIS OLD JABRONI TAKES IT RIGHT IN THE POOP SHOOT~" << std::endl;
+            //squishing_boners();;
+            throw DrawException1("THIS OLD GRANNY TAKES IT RIGHT IN THE POOP SHOOT~");
+        }
+    //} catch(gap::GapException1 &ge1) {
+      //  std::cout << "~~~~COLLAPSING MONKEYS~ " << std::endl;
+        //exit(9);
+        //throw ge1;
+    //}
 
     std::cout << "~~~~COLLAPSING JUNKIES~ " << std::endl;
-    //exit(9);
+    //squishing_boners();;
 
 
     this->rng_ff.lower = lr;
@@ -1776,7 +2295,7 @@ void draw::set_range_urs(int ur, int sp_ur)
     /*
     else if(!this->empty_ff()) {
         std::cout << "THIS OLD TRANNY TAKES IT RIGHT IN THE POOP SHOOT" << *this << std::endl;
-        exit(9);
+        squishing_boners();;
         for(int i = 0; i < NBALLS-1; i++) {
             if(this->balls[i] && 
                 (this->balls[i] < lr || this->balls[i] > ur)) {
@@ -1795,7 +2314,7 @@ void draw::set_range_urs(int ur, int sp_ur)
 
     if(!d.valid()) { //_constraints()) {
         std::cout << "THIS OLD NANNY TAKES IT RIGHT IN THE POOP SHOOT~" << std::endl;
-        exit(9);
+        squishing_boners();;
     }
 
     while(1) std::cout << "LET'S FUCK SOME TRANNIES~ ";
@@ -1831,15 +2350,16 @@ void draw::set_range(range dr)
             }
         }
         std::cout << "THIS OLD JABRONI NAMED DANNY TAKES IT RIGHT IN THE POOP SHOOT " << *this << std::endl;
-        //exit(9);
+        //squishing_boners();;
     //}
     */
-
+    //while(1) std::cout << "BONE SMUGGLING JABRONIES~ ";
     draw d = *this;
+    //while(1) std::cout << "BONE SMUGGLING JABRONIES~ " <<* this;
 
     if(!d.valid()) { //_constraints()) {
         std::cout << "THIS OLD JABRONI NAMED DANNY TAKES IT RIGHT IN THE POOP SHOOT~" << std::endl;
-        exit(9);
+        squishing_boners();;
     }
 
     std::cout << "LET'S FUCK SOME WHORES~ ";
@@ -1856,7 +2376,7 @@ void draw::set_range(range dr)
         }
         show_ball_const();
         std::cout << "POOPY BONERS 4~ ";
-        //exit(9);
+        //squishing_boners();;
         
     }
     */
@@ -1877,7 +2397,7 @@ void draw::set_ranges(range dr, range dr_sp)
     /*
     else if(!this->empty_ff()) {
         std::cout << "THIS OLD JUNKIE TAKES IT RIGHT IN THE POOP SHOOT" << *this << std::endl;
-        exit(9);
+        squishing_boners();;
         for(int i = 0; i < NBALLS-1; i++) {
             if(this->balls[i] && 
                 (this->balls[i] < dr.lower || this->balls[i] > dr.upper)) {
@@ -1892,7 +2412,7 @@ void draw::set_ranges(range dr, range dr_sp)
 
     if(!d.valid()) { //_constraints()) {
         std::cout << "THIS OLD JUNKIE NAMED DANNY TAKES IT RIGHT IN THE POOP SHOOT~" << std::endl;
-        exit(9);
+        squishing_boners();;
     }
 
     while(1) std::cout << "LET'S FUCK SOME JUNKIES~ ";
@@ -1906,7 +2426,7 @@ void draw::set_range_sp(range dr_sp)
 {
     if(!VALID_RANGE_SP(dr_sp.lower, dr_sp.upper)) 
         throw InvalidRangeException("draw::set_range_sp(range dr): !VALID_RANGE_SP");
-
+    while(1) std::cout << "LET'S FUCK SOME MONKEYS~ ";
     this->rng_sp = dr_sp;
 }
 
@@ -1965,7 +2485,7 @@ void draw::set_ball(int index, int val)
     draw d = *this;
     d[index] = val;
     std::cout << "$-SHNOODLING JABRONIES~ " << d << ", " <<  std::endl;
-    //exit(9);
+    //squishing_boners();;
 
     /*
     for(int i = 0; i < NBALLS; i++) {
@@ -2006,10 +2526,10 @@ void draw::set_ball(int index, int val)
     */
 
     std::cout << "BALL BASHING NANNIES~ " << *this << std::endl;
-    //exit(9);
+    //squishing_boners();;
     if(!d.valid()) { //_constraints()) {
         std::cout << "OVULATING JABRONIES BIG TIME" << std::endl;
-        exit(9);
+        squishing_boners();;
     }
     std::cout << "LET'S FUCK SOME GRANNIES~ "<< std::endl;;
 
